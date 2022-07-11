@@ -2,9 +2,8 @@ var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
 //use the smallest size for design
-//iPhone 12	390 x 844
-c.width = 844;
-c.height = 390;
+c.width = 800;
+c.height = 600;
 
 /* window.addEventListener("resize", function () {
     c.width = window.innerWidth;
@@ -12,21 +11,23 @@ c.height = 390;
 }); */
 
 /* var mouse = { x: c.width / 2, y: c.height / 2 }
-
 window.addEventListener("mousemove", function (event) {
     mouse.x = event.clientX;
     mouse.y = event.clientY;
 }); */
-
-let key = ""
-let PianoKeys = []
-let Notes = []
 
 //Game setting
 const pianoKeyHeight = 30
 const noteHeight = 30
 const noteColor = 'black'
 const gridLineColor = 'gray'
+
+let score = 0
+let key = ""
+let PianoKeys = []
+let Notes = []
+
+let playSound = () => new Audio('./video/SawanoHiroyuki[nZk]Laco「Hands Up to the Sky」Music Video ８６―エイティシックス― ver..mp4').play()
 
 //hue 1-300 color code
 
@@ -35,46 +36,71 @@ window.addEventListener("keydown", function (event) {
     switch (key) {
         case "KeyQ":
             console.log(key)
-            PianoKeys.push(new pianoKey(0, c.height, 0))
+            playerObjectLimited()
+            PianoKeys.push(new pianoKey(1, c.height, 0))
+            new Audio('./video/zapsplat_musical_drum_tom_set_down_004_54846.mp3').play()
             break;
         case "KeyW":
             console.log(key)
-            PianoKeys.push(new pianoKey(c.width / 10 * 1, c.height, 30))
+            playerObjectLimited()
+            PianoKeys.push(new pianoKey(1 + c.width / 10 * 1, c.height, 30))
+            new Audio('./video/zapsplat_musical_drum_tom_set_down_005_54847.mp3').play()
             break;
         case "KeyE":
             console.log(key)
-            PianoKeys.push(new pianoKey(c.width / 10 * 2, c.height, 60))
+            playerObjectLimited()
+            PianoKeys.push(new pianoKey(1 + c.width / 10 * 2, c.height, 60))
+            new Audio('./video/zapsplat_musical_drum_tom_set_down_004_54846.mp3').play()
             break;
         case "KeyR":
             console.log(key)
-            PianoKeys.push(new pianoKey(c.width / 10 * 3, c.height, 90))
+            playerObjectLimited()
+            PianoKeys.push(new pianoKey(1 + c.width / 10 * 3, c.height, 90))
+            new Audio('./video/zapsplat_musical_drum_tom_set_down_005_54847.mp3').play()
             break;
         case "KeyT":
             console.log(key)
-            PianoKeys.push(new pianoKey(c.width / 10 * 4, c.height, 120))
+            playerObjectLimited()
+            PianoKeys.push(new pianoKey(1 + c.width / 10 * 4, c.height, 120))
+            new Audio('./video/zapsplat_musical_drum_tom_set_down_004_54846.mp3').play()
             break;
         case "KeyY":
             console.log(key)
-            PianoKeys.push(new pianoKey(c.width / 10 * 5, c.height, 150))
+            playerObjectLimited()
+            PianoKeys.push(new pianoKey(1 + c.width / 10 * 5, c.height, 150))
+            new Audio('./video/zapsplat_musical_drum_tom_set_down_005_54847.mp3').play()
             break;
         case "KeyU":
             console.log(key)
-            PianoKeys.push(new pianoKey(c.width / 10 * 6, c.height, 180))
+            playerObjectLimited()
+            PianoKeys.push(new pianoKey(1 + c.width / 10 * 6, c.height, 180))
+            new Audio('./video/zapsplat_musical_drum_tom_set_down_004_54846.mp3').play()
             break;
         case "KeyI":
             console.log(key)
-            PianoKeys.push(new pianoKey(c.width / 10 * 7, c.height, 210))
+            playerObjectLimited()
+            PianoKeys.push(new pianoKey(1 + c.width / 10 * 7, c.height, 210))
+            new Audio('./video/zapsplat_musical_drum_tom_set_down_005_54847.mp3').play()
             break;
         case "KeyO":
             console.log(key)
-            PianoKeys.push(new pianoKey(c.width / 10 * 8, c.height, 240))
+            playerObjectLimited()
+            PianoKeys.push(new pianoKey(1 + c.width / 10 * 8, c.height, 240))
+            new Audio('./video/zapsplat_musical_drum_tom_set_down_004_54846.mp3').play()
             break;
         case "KeyP":
             console.log(key)
-            PianoKeys.push(new pianoKey(c.width / 10 * 9, c.height, 270))
+            playerObjectLimited()
+            PianoKeys.push(new pianoKey(1 + c.width / 10 * 9, c.height, 270))
+            new Audio('./video/zapsplat_musical_drum_tom_set_down_005_54847.mp3').play()
             break;
     }
 })
+
+function playerObjectLimited() {
+    if (PianoKeys.length < 4) return
+    PianoKeys.shift()
+}
 
 class pianoKey {
     constructor(x, y, hue) {
@@ -83,7 +109,8 @@ class pianoKey {
             y: y - pianoKeyHeight
         }
         this.color = 'hsl(' + hue + ', 100%, 75%)'
-        this.width = c.width / 10
+        //avoid tragger next col, left right per 1 distance
+        this.width = c.width / 10 - 2
         this.height = pianoKeyHeight
         this.time = 30
     }
@@ -152,9 +179,10 @@ function init() {
 }
 
 function drawGridLine() {
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i <= 10; i++) {
         ctx.beginPath()
         ctx.strokeStyle = gridLineColor
+        ctx.lineWidth = 2
         ctx.moveTo(i * (c.width / 10), 0)
         ctx.lineTo(i * (c.width / 10), c.height)
         ctx.stroke()
@@ -169,7 +197,25 @@ function noteOverScreen() {
             i--
         }
     }
-    console.log(Notes.length)
+}
+
+function drawScore() {
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    ctx.fillText('score: ' + score, c.width / 2, 50);
+}
+
+function Collision() {
+    for (var i = 0; i < PianoKeys.length; i++) {
+        for (var j = 0; j < Notes.length; j++) {
+            if (boxCollision(PianoKeys[i], Notes[j]) === true) {
+                Notes.splice(j, 1)
+                score += 100
+                console.log('hit')
+                j--
+            }
+        }
+    }
 }
 
 var fps = 120
@@ -179,6 +225,8 @@ function animate() {
 
         requestAnimationFrame(animate)
         ctx.clearRect(0, 0, c.width, c.height)
+
+
 
         Notes.forEach((object) => {
             object.update()
@@ -194,21 +242,18 @@ function animate() {
             }
         }
 
-        //
-
-        for (var i = 0; i < PianoKeys.length; i++) {
-            for (var j = 0; j < Notes.length; j++) {
-                if (boxCollision(PianoKeys[i], Notes[j]) === true) {
-                    Notes.splice(j, 1)
-                    j--
-                }
-            }
-        }
+        Collision()
 
         drawGridLine()
+
+        drawScore()
 
     }, 1000 / fps)
 }
 
-animate()
-init()
+const startBtn = document.querySelector('.startBtn')
+startBtn.addEventListener('click', () => {
+    startBtn.classList.add('btnHidden')
+    animate()
+    init()
+})
